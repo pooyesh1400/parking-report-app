@@ -2,7 +2,7 @@ function showSection(sectionId) {
   const sections = document.querySelectorAll('.content-section');
   sections.forEach(sec => sec.classList.remove('active'));
   document.getElementById(sectionId).classList.add('active');
-}
+
 document.getElementById("add-tab-btn").addEventListener("click", function() {
   const tabName = prompt("نام تب جدید را وارد کنید:");
   if (tabName) {
@@ -31,4 +31,4 @@ document.getElementById("add-tab-btn").addEventListener("click", function() {
       document.getElementById(tabId).classList.add("active");
     });
   }
-});
+}});
