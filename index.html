@@ -2,46 +2,116 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
-  <title>📊 داشبورد پروژه پارکینگ</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="data-minutes.js"></script>
-  <script src="data-status.js"></script>
-  <script src="app-tabs.js" defer></script>
+  <title>برنامه مدیریت گزارشات پارکینگ</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      direction: rtl;
+      background: #f0f4f8;
+      margin: 0;
+      padding: 20px;
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      padding: 8px 16px;
+      border: none;
+      background: #2196f3;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: #ffa500;
+    }
+    #add-tab-btn {
+      background: #ffa500;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .tab-content {
+      display: none;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .tab-content.active {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-  <h1>📊 داشبورد پروژه</h1>
+
+  <h1>📊 برنامه مدیریت گزارشات پارکینگ</h1>
 
   <div class="tabs">
     <button class="tab-btn active" data-tab="minutes">📄 صورتجلسات</button>
     <button class="tab-btn" data-tab="status">📋 صورت وضعیت‌ها</button>
     <button id="add-tab-btn">➕ افزودن تب</button>
   </div>
-<div id="tab-contents">
-  <div id="minutes" class="tab-content active">محتوای صورتجلسات</div>
-  <div id="status" class="tab-content">محتوای صورت وضعیت‌ها</div>
-</div>
 
-  <div id="minutes" class="tab-content active">
-    <table>
-      <thead>
-        <tr>
-          <th>ردیف</th>
-          <th>شرح آیتم</th>
-          <th>تهیه نشده</th>
-          <th>ارسال شده</th>
-          <th>تایید شده</th>
-          <th>توضیحات</th>
-        </tr>
-      </thead>
-      <tbody id="minutes-table"></tbody>
-    </table>
+  <div id="tab-contents">
+    <div id="minutes" class="tab-content active">
+      <h3>صورتجلسات</h3>
+      <p>اینجا می‌توانید جدول صورتجلسات را قرار دهید.</p>
+    </div>
+    <div id="status" class="tab-content">
+      <h3>صورت وضعیت‌ها</h3>
+      <p>اینجا می‌توانید جدول صورت وضعیت‌ها را قرار دهید.</p>
+    </div>
   </div>
 
-  <div id="status" class="tab-content">
-    <table>
-      <thead>
-        <tr>
-          <th>ردیف</th>
-          <th>شرح آیتم</th>
-          <th>مبلغ</th>
-          <th>توضیحات</th>
+  <script>
+    // تغییر تب
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", function() {
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+        this.classList.add("active");
+        const tabId = this.dataset.tab;
+        if (tabId) document.getElementById(tabId).classList.add("active");
+      });
+    });
+
+    // افزودن تب جدید
+    document.getElementById("add-tab-btn").addEventListener("click", function() {
+      const tabName = prompt("نام تب جدید را وارد کنید:");
+      if (tabName) {
+        const tabId = tabName.replace(/\s+/g, '-').toLowerCase();
+
+        // دکمه تب جدید
+        const newTabBtn = document.createElement("button");
+        newTabBtn.className = "tab-btn";
+        newTabBtn.dataset.tab = tabId;
+        newTabBtn.textContent = tabName;
+        document.querySelector(".tabs").insertBefore(newTabBtn, this);
+
+        // محتوای تب جدید
+        const newTabContent = document.createElement("div");
+        newTabContent.id = tabId;
+        newTabContent.className = "tab-content";
+        newTabContent.innerHTML = `<h3>${tabName}</h3><p>محتوای اولیه ${tabName}</p>`;
+        document.getElementById("tab-contents").appendChild(newTabContent);
+
+        // رویداد تب جدید
+        newTabBtn.addEventListener("click", function() {
+          document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+          document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+          this.classList.add("active");
+          document.getElementById(tabId).classList.add("active");
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
