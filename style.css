@@ -75,3 +75,49 @@
 #tableContainer button:hover {
   background: #001f3f;
 }
+.actions {
+  padding: 20px 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.actions button {
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: none;
+  background: #f9c80e;
+  color: #002b5b;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.actions button:hover {
+  background: #f2b900;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(249, 200, 14, 0.4);
+}
+
+.actions input[type="file"] {
+  display: none;
+}
+
+.actions label {
+  padding: 12px 20px;
+  border-radius: 25px;
+  background: #f9c80e;
+  color: #002b5b;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 15px;
+}
+
+.actions label:hover {
+  background: #f2b900;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(249, 200, 14, 0.4);
+}
