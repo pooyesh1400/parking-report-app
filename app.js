@@ -1,123 +1,85 @@
 let tabs = [];
-let activeTab = null;
+let activeTabIndex = -1;
 
 document.getElementById("addTab").addEventListener("click", () => {
   const name = prompt("نام تب را وارد کنید:");
   if (name) {
-    const tab = { name: name, table: [] };
-    tabs.push(tab);
+    tabs.push({ name, table: [] });
+    activeTabIndex = tabs.length - 1;
     renderTabs();
-    setActiveTab(tab);
+    renderTable();
   }
 });
 
 function renderTabs() {
   const container = document.getElementById("tabContainer");
   container.innerHTML = "";
-  tabs.forEach(tab => {
-    const div = document.createElement("div");
-    div.className = "tab";
-    div.textContent = tab.name;
-    div.addEventListener("click", () => setActiveTab(tab));
-    if (tab === activeTab) div.classList.add("active");
-    container.appendChild(div);
+  tabs.forEach((tab, index) => {
+    const btn = document.createElement("div");
+    btn.className = "tab" + (index === activeTabIndex ? " active" : "");
+    btn.innerText = tab.name;
+    btn.onclick = () => {
+      activeTabIndex = index;
+      renderTabs();
+      renderTable();
+    };
+    container.appendChild(btn);
   });
-}
-
-function setActiveTab(tab) {
-  activeTab = tab;
-  renderTabs();
-  renderTable();
 }
 
 function renderTable() {
   const container = document.getElementById("tableContainer");
   container.innerHTML = "";
 
-  if (!activeTab) {
-    container.innerHTML = "<p>ابتدا یک تب انتخاب کنید.</p>";
-    return;
-  }
+  if (activeTabIndex === -1) return;
 
   const table = document.createElement("table");
   table.style.width = "100%";
   table.style.borderCollapse = "collapse";
+  table.style.direction = "rtl";
 
-  activeTab.table.forEach((row, rowIndex) => {
+  const currentTable = tabs[activeTabIndex].table;
+
+  currentTable.forEach((row, rowIndex) => {
     const tr = document.createElement("tr");
-
     row.forEach((cell, colIndex) => {
       const td = document.createElement("td");
-      td.style.border = "1px solid #334155";
-      td.style.padding = "10px";
       td.contentEditable = true;
       td.innerText = cell;
-
-      td.addEventListener("input", () => {
-        activeTab.table[rowIndex][colIndex] = td.innerText;
-      });
-
+      td.style.border = "1px solid #555";
+      td.style.padding = "8px";
       tr.appendChild(td);
     });
-
-    // دکمه حذف سطر
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "❌";
-    deleteBtn.style.marginRight = "8px";
-    deleteBtn.onclick = () => {
-      activeTab.table.splice(rowIndex, 1);
-      renderTable();
-    };
-    const tdBtn = document.createElement("td");
-    tdBtn.appendChild(deleteBtn);
-    tr.appendChild(tdBtn);
-
     table.appendChild(tr);
   });
 
   container.appendChild(table);
-
-  // دکمه اضافه سطر
-  const addRowBtn = document.createElement("button");
-  addRowBtn.textContent = "➕ افزودن سطر";
-  addRowBtn.onclick = () => {
-    const cols = activeTab.table[0]?.length || 3;
-    activeTab.table.push(Array(cols).fill(""));
-    renderTable();
-  };
-  container.appendChild(addRowBtn);
-
-  // دکمه اضافه ستون
-  const addColBtn = document.createElement("button");
-  addColBtn.textContent = "➕ افزودن ستون";
-  addColBtn.style.marginRight = "12px";
-  addColBtn.onclick = () => {
-    activeTab.table.forEach(row => row.push(""));
-    if (activeTab.table.length === 0) {
-      activeTab.table.push([""]);
-    }
-    renderTable();
-  };
-  container.appendChild(addColBtn);
 }
 
+// ذخیره فایل JSON
 function exportData() {
-  const data = JSON.stringify(tabs);
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(tabs));
   const a = document.createElement("a");
-  a.href = URL.createObjectURL(new Blob([data], { type: "application/json" }));
-  a.download = "data.json";
+  a.setAttribute("href", dataStr);
+  a.setAttribute("download", "data.json");
+  document.body.appendChild(a);
   a.click();
+  a.remove();
 }
 
+// بارگذاری فایل JSON
 function importData(event) {
   const file = event.target.files[0];
   if (!file) return;
 
   const reader = new FileReader();
-  reader.onload = e => {
-    tabs = JSON.parse(e.target.result);
-    if (tabs.length) {
-      activeTab = tabs[0];
+  reader.onload = (e) => {
+    const content = JSON.parse(e.target.result);
+    if (Array.isArray(content)) {
+      tabs = content;
+    } else if (content.name && content.table) {
+      tabs.push(content);
+      activeTabIndex = tabs.length - 1;
     }
     renderTabs();
     renderTable();
