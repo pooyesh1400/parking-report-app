@@ -1,26 +1,13 @@
-function addReport() {
-  const text = document.getElementById("reportText").value.trim();
-  if (text === "") return;
+function showPage(page) {
+  let content = document.getElementById("content");
 
-  let reports = JSON.parse(localStorage.getItem("reports") || "[]");
-  reports.unshift(text);
-  localStorage.setItem("reports", JSON.stringify(reports));
-
-  document.getElementById("reportText").value = "";
-  loadReports();
+  if (page === 'purchase') {
+    content.innerHTML = "<h2>درخواست خرید</h2><p>در این بخش لیست درخواست‌ها نمایش داده می‌شود.</p>";
+  }
+  else if (page === 'sessions') {
+    content.innerHTML = "<h2>صورتجلسات</h2><p>در این بخش صورتجلسات ثبت شده نمایش داده می‌شود.</p>";
+  }
+  else if (page === 'status') {
+    content.innerHTML = "<h2>صورت وضعیت</h2><p>در این بخش صورت وضعیت‌ها نمایش داده می‌شود.</p>";
+  }
 }
-
-function loadReports() {
-  const reportList = document.getElementById("reportList");
-  reportList.innerHTML = "";
-
-  let reports = JSON.parse(localStorage.getItem("reports") || "[]");
-
-  reports.forEach((report) => {
-    const li = document.createElement("li");
-    li.textContent = report;
-    reportList.appendChild(li);
-  });
-}
-
-window.onload = loadReports;
