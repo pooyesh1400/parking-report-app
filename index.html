@@ -80,4 +80,57 @@
       border: none;
       background: #f9c80e;
       color: #002b5b;
-      font-weight: bold
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 15px;
+    }
+    .actions button:hover {
+      background: #f2b900;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(249, 200, 14, 0.4);
+    }
+    .actions input[type="file"] {
+      display: none;
+    }
+    .actions label {
+      padding: 12px 20px;
+      border-radius: 25px;
+      background: #f9c80e;
+      color: #002b5b;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 15px;
+    }
+    .actions label:hover {
+      background: #f2b900;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(249, 200, 14, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">لوگو پالایشگاه اصفهان</div>
+    <h1>سامانه مدیریت پارکینگ پالایشگاه اصفهان</h1>
+  </header>
+
+  <div class="tabs">
+    <button id="addTab">➕ افزودن تب</button>
+    <div id="tabContainer"></div>
+  </div>
+
+  <div class="actions">
+    <button onclick="exportData()">📤 ذخیره JSON</button>
+    <label for="fileInput">📥 بارگذاری JSON</label>
+    <input type="file" id="fileInput" onchange="importData(event)">
+    <label for="excelInput">📊 بارگذاری Excel</label>
+    <input type="file" id="excelInput" onchange="importExcel(event)">
+  </div>
+
+  <div id="tableContainer"></div>
+
+</body>
+</html>
