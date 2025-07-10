@@ -41,5 +41,10 @@
   <button id="addTab">➕ افزودن تب</button>
   <div id="tabContainer"></div>
 </div>
+<div class="actions">
+  <button onclick="exportData()">📤 ذخیره JSON</button>
+  <label for="fileInput">📥 بارگذاری JSON</label>
+  <input type="file" id="fileInput" onchange="importData(event)">
+</div>
 
 </body>
