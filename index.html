@@ -2,175 +2,22 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
-  <title>گزارش پروژه</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f0f4f8;
-      padding: 20px;
-    }
-    .tabs {
-      display: flex;
-      margin-bottom: 10px;
-    }
-    .tab {
-      background: #1976d2;
-      color: #fff;
-      padding: 10px 15px;
-      margin-left: 5px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .tab.active {
-      background: #ff9800;
-    }
-    .tab button {
-      background: none;
-      border: none;
-      color: #fff;
-      margin-right: 5px;
-      cursor: pointer;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      background: #fff;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: center;
-    }
-    th {
-      background: #1976d2;
-      color: #fff;
-      cursor: pointer;
-    }
-    td {
-      cursor: pointer;
-    }
-    .controls {
-      margin: 10px 0;
-    }
-    button {
-      padding: 6px 12px;
-      margin-left: 5px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .add {
-      background: #1976d2;
-      color: #fff;
-    }
-    .remove {
-      background: #ff5722;
-      color: #fff;
-    }
-  </style>
+  <title>گزارش پروژه پارکینگ</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="tabs">
+    <button id="addTab">افزودن تب +</button>
+    <div id="tabContainer"></div>
+  </div>
 
-<div class="tabs" id="tabs"></div>
-<div class="controls">
-  <button class="add" onclick="addTab()">تب جدید</button>
-</div>
+  <div id="tableContainer"></div>
 
-<div id="tables"></div>
+  <div class="actions">
+    <button onclick="exportData()">📤 ذخیره JSON</button>
+    <input type="file" id="fileInput" onchange="importData(event)">
+  </div>
 
-<script>
-let tabCount = 0;
-
-function addTab() {
-  const tabId = `tab${tabCount++}`;
-  const tabsDiv = document.getElementById('tabs');
-  const tablesDiv = document.getElementById('tables');
-
-  // ساخت تب
-  const tab = document.createElement('div');
-  tab.className = 'tab';
-  tab.id = `btn-${tabId}`;
-  tab.innerHTML = `<button onclick="removeTab('${tabId}')">✖</button> تب ${tabCount}`;
-  tab.onclick = () => showTable(tabId);
-  tabsDiv.appendChild(tab);
-
-  // ساخت جدول
-  const tableDiv = document.createElement('div');
-  tableDiv.id = tabId;
-  tableDiv.style.display = 'none';
-  tableDiv.innerHTML = `
-    <div class="controls">
-      <button class="add" onclick="addRow('${tabId}')">+ سطر</button>
-      <button class="add" onclick="addCol('${tabId}')">+ ستون</button>
-      <button class="remove" onclick="removeRow('${tabId}')">- سطر</button>
-      <button class="remove" onclick="removeCol('${tabId}')">- ستون</button>
-    </div>
-    <table><thead><tr><th contenteditable="true">ستون 1</th></tr></thead>
-    <tbody><tr><td></td></tr></tbody></table>
-  `;
-  tablesDiv.appendChild(tableDiv);
-
-  showTable(tabId);
-}
-
-function showTable(id) {
-  document.querySelectorAll('.tabs .tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('#tables > div').forEach(d => d.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
-  document.getElementById(`btn-${id}`).classList.add('active');
-}
-
-function removeTab(id) {
-  document.getElementById(`btn-${id}`).remove();
-  document.getElementById(id).remove();
-}
-
-function addRow(tabId) {
-  const table = document.querySelector(`#${tabId} table tbody`);
-  const cols = table.rows[0].cells.length;
-  const row = table.insertRow();
-  for (let i = 0; i < cols; i++) {
-    const cell = row.insertCell();
-    cell.onclick = () => toggleCell(cell);
-  }
-}
-
-function addCol(tabId) {
-  const table = document.querySelector(`#${tabId} table`);
-  const header = table.tHead.rows[0];
-  const th = document.createElement('th');
-  th.contentEditable = "true";
-  th.innerText = `ستون ${header.cells.length + 1}`;
-  header.appendChild(th);
-
-  for (let row of table.tBodies[0].rows) {
-    const cell = row.insertCell();
-    cell.onclick = () => toggleCell(cell);
-  }
-}
-
-function removeRow(tabId) {
-  const table = document.querySelector(`#${tabId} table tbody`);
-  if (table.rows.length > 0) table.deleteRow(-1);
-}
-
-function removeCol(tabId) {
-  const table = document.querySelector(`#${tabId} table`);
-  const colCount = table.tHead.rows[0].cells.length;
-  if (colCount > 1) {
-    table.tHead.rows[0].deleteCell(-1);
-    for (let row of table.tBodies[0].rows) {
-      row.deleteCell(-1);
-    }
-  }
-}
-
-function toggleCell(cell) {
-  if (cell.innerText === '') cell.innerText = '✔️';
-  else if (cell.innerText === '✔️') cell.innerText = '❌';
-  else cell.innerText = '';
-}
-</script>
-
+  <script src="app.js"></script>
 </body>
 </html>
