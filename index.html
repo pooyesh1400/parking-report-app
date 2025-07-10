@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="fa">
 <head>
   <meta charset="UTF-8" />
   <title>سامانه مدیریت پارکینگ پالایشگاه اصفهان</title>
@@ -30,21 +32,52 @@
       font-weight: 600;
       user-select: none;
     }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="logo">لوگو پالایشگاه اصفهان</div>
-    <h1>سامانه مدیریت پارکینگ پالایشگاه اصفهان</h1>
-  </header>
-  <div class="tabs">
-  <button id="addTab">➕ افزودن تب</button>
-  <div id="tabContainer"></div>
-</div>
-<div class="actions">
-  <button onclick="exportData()">📤 ذخیره JSON</button>
-  <label for="fileInput">📥 بارگذاری JSON</label>
-  <input type="file" id="fileInput" onchange="importData(event)">
-</div>
-
-</body>
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding: 15px 30px;
+      background: #f5f7fa;
+      flex-wrap: wrap;
+    }
+    .tabs .tab {
+      padding: 10px 18px;
+      border-radius: 25px;
+      background: #e0e0e0;
+      color: #333;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+    .tabs .tab.active {
+      background: #002b5b;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 43, 91, 0.3);
+    }
+    #addTab {
+      padding: 10px 18px;
+      border-radius: 25px;
+      background: #f9c80e;
+      color: #002b5b;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    #addTab:hover {
+      background: #f2b900;
+    }
+    .actions {
+      padding: 20px 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+    }
+    .actions button {
+      padding: 12px 20px;
+      border-radius: 25px;
+      border: none;
+      background: #f9c80e;
+      color: #002b5b;
+      font-weight: bold
