@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>گزارشات پروژه پارکینگ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>گزارشات پروژه پارکینگ</h1>
+    <nav>
+      <button onclick="showSection('buyRequests')">📑 درخواست خرید</button>
+      <button onclick="showSection('sessions')">📋 صورتجلسات</button>
+      <button onclick="showSection('reports')">📊 صورت وضعیت‌ها</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="buyRequests" class="content-section active">
+      <h2>📑 درخواست خرید</h2>
+      <div id="buyTable"></div>
+    </section>
+
+    <section id="sessions" class="content-section">
+      <h2>📋 صورتجلسات</h2>
+      <div id="sessionTable"></div>
+    </section>
+
+    <section id="reports" class="content-section">
+      <h2>📊 صورت وضعیت‌ها</h2>
+      <div id="reportTable"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
