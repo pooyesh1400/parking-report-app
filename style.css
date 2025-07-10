@@ -1,0 +1,59 @@
+body {
+  font-family: 'Vazir', sans-serif;
+  background: #f0f4f8;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  direction: rtl;
+}
+
+header {
+  background: #0077cc;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+nav button {
+  background: #ffa500;
+  color: #fff;
+  border: none;
+  margin: 0.3rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+nav button:hover {
+  background: #ff8c00;
+}
+
+main {
+  padding: 1rem;
+}
+
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+  margin: 1rem 0;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+th {
+  background: #0077cc;
+  color: white;
+}
