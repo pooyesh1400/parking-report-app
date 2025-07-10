@@ -1,59 +1,58 @@
 body {
-  font-family: 'Vazir', sans-serif;
-  background: #f0f4f8;
+  font-family: sans-serif;
+  background: #f5faff;
   color: #333;
-  margin: 0;
-  padding: 0;
-  direction: rtl;
+  padding: 20px;
 }
 
-header {
-  background: #0077cc;
-  color: white;
-  padding: 1rem;
-  text-align: center;
+h1 {
+  color: #ff6600;
+  margin-bottom: 20px;
 }
 
-nav button {
-  background: #ffa500;
-  color: #fff;
+.tabs {
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  padding: 10px 20px;
   border: none;
-  margin: 0.3rem;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  background: #e6f2ff;
+  color: #007acc;
   cursor: pointer;
+  margin-left: 5px;
+  border-radius: 8px;
+  font-size: 16px;
 }
 
-nav button:hover {
-  background: #ff8c00;
+.tab-btn.active {
+  background: #ff6600;
+  color: #fff;
 }
 
-main {
-  padding: 1rem;
-}
-
-.content-section {
+.tab-content {
   display: none;
 }
 
-.content-section.active {
+.tab-content.active {
   display: block;
 }
 
 table {
   border-collapse: collapse;
   width: 100%;
-  background: white;
-  margin: 1rem 0;
+  margin-top: 10px;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
 }
 
 th, td {
-  border: 1px solid #ddd;
-  padding: 0.5rem;
+  padding: 10px;
   text-align: center;
 }
 
 th {
-  background: #0077cc;
-  color: white;
+  background: #e6f2ff;
 }
