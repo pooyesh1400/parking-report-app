@@ -18,7 +18,11 @@ function renderTabs() {
     const div = document.createElement("div");
     div.className = "tab" + (index === activeTabIndex ? " active" : "");
     div.textContent = tab.name;
-    div.onclick = () => { activeTabIndex = index; renderTabs(); renderTable(); };
+    div.onclick = () => {
+      activeTabIndex = index;
+      renderTabs();
+      renderTable();
+    };
     container.appendChild(div);
   });
 }
@@ -29,6 +33,8 @@ function renderTable() {
   if (activeTabIndex === null) return;
   const tableData = tabs[activeTabIndex].table;
   const table = document.createElement("table");
+  table.style.width = "100%";
+  table.style.borderCollapse = "collapse";
 
   tableData.forEach((row, rowIndex) => {
     const tr = document.createElement("tr");
@@ -36,6 +42,8 @@ function renderTable() {
       const td = document.createElement("td");
       td.contentEditable = true;
       td.innerText = cell;
+      td.style.border = "1px solid #ccc";
+      td.style.padding = "8px";
       td.oninput = () => {
         tableData[rowIndex][colIndex] = td.innerText;
       };
@@ -44,7 +52,6 @@ function renderTable() {
     table.appendChild(tr);
   });
 
-  // دکمه افزودن سطر و ستون
   const addRowBtn = document.createElement("button");
   addRowBtn.textContent = "➕ سطر جدید";
   addRowBtn.onclick = () => {
@@ -87,6 +94,18 @@ function importData(event) {
   reader.readAsText(file);
 }
 
+// این تابع تعداد ستون‌ها را یکسان می‌کند
+function normalizeTableData(tableData) {
+  const maxCols = Math.max(...tableData.map(row => row.length));
+  return tableData.map(row => {
+    const newRow = row.slice();
+    while (newRow.length < maxCols) {
+      newRow.push("");
+    }
+    return newRow;
+  });
+}
+
 function importExcel(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -96,7 +115,9 @@ function importExcel(event) {
     const workbook = XLSX.read(data, { type: 'array' });
     const sheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[sheetName];
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    let jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+    jsonData = normalizeTableData(jsonData);
 
     const name = prompt("نام تب Excel:");
     if (name) {
