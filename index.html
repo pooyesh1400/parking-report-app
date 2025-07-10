@@ -2,115 +2,218 @@
 <html lang="fa">
 <head>
   <meta charset="UTF-8">
-  <title>برنامه مدیریت گزارشات پارکینگ</title>
+  <title>مدیریت گزارشات</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: "Vazir", sans-serif;
       direction: rtl;
-      background: #f0f4f8;
-      margin: 0;
+      background: #f5f7fa;
       padding: 20px;
     }
     .tabs {
       display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
+      gap: 8px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
     }
     .tab-btn {
-      padding: 8px 16px;
+      padding: 6px 12px;
       border: none;
-      background: #2196f3;
+      background: #1565c0;
       color: white;
       border-radius: 5px;
       cursor: pointer;
+      display: flex;
+      align-items: center;
     }
     .tab-btn.active {
-      background: #ffa500;
+      background: #fb8c00;
     }
-    #add-tab-btn {
-      background: #ffa500;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
+    .tab-btn span {
+      margin-right: 5px;
     }
     .tab-content {
       display: none;
-      padding: 20px;
       background: white;
+      padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.08);
     }
     .tab-content.active {
       display: block;
+    }
+    button {
+      cursor: pointer;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      text-align: center;
+    }
+    .control-btn {
+      padding: 4px 8px;
+      background: #42a5f5;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      margin-left: 5px;
+    }
+    .small-btn {
+      padding: 2px 5px;
+      font-size: 12px;
+      margin-right: 3px;
+      border-radius: 3px;
+    }
+    .btn-danger { background: #e53935; }
+    .btn-warning { background: #fbc02d; color: black; }
+    .btn-primary { background: #1565c0; }
+    #add-tab-btn {
+      background: #fb8c00;
+      color: white;
+      border: none;
+      padding: 7px 12px;
+      border-radius: 5px;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
 
-  <h1>📊 برنامه مدیریت گزارشات پارکینگ</h1>
+  <h1>📊 مدیریت گزارشات پارکینگ</h1>
 
-  <div class="tabs">
-    <button class="tab-btn active" data-tab="minutes">📄 صورتجلسات</button>
-    <button class="tab-btn" data-tab="status">📋 صورت وضعیت‌ها</button>
-    <button id="add-tab-btn">➕ افزودن تب</button>
+  <div class="tabs" id="tabs">
+    <button class="tab-btn active" data-tab="tab1">
+      <span>صورتجلسات</span>
+      <button class="small-btn btn-warning" onclick="renameTab(event, 'tab1')">✏️</button>
+      <button class="small-btn btn-danger" onclick="removeTab(event, 'tab1')">❌</button>
+    </button>
+    <button id="add-tab-btn" onclick="addTab()">➕ افزودن تب</button>
   </div>
 
   <div id="tab-contents">
-    <div id="minutes" class="tab-content active">
+    <div id="tab1" class="tab-content active">
       <h3>صورتجلسات</h3>
-      <p>اینجا می‌توانید جدول صورتجلسات را قرار دهید.</p>
-    </div>
-    <div id="status" class="tab-content">
-      <h3>صورت وضعیت‌ها</h3>
-      <p>اینجا می‌توانید جدول صورت وضعیت‌ها را قرار دهید.</p>
+      <button class="control-btn" onclick="addRow('tab1-table')">➕ ردیف</button>
+      <button class="control-btn" onclick="addColumn('tab1-table')">➕ ستون</button>
+      <table id="tab1-table">
+        <tr>
+          <th>ردیف</th>
+          <th>شرح</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>نمونه داده</td>
+        </tr>
+      </table>
     </div>
   </div>
 
   <script>
-    // تغییر تب
+    // سوئیچ تب
     document.querySelectorAll(".tab-btn").forEach(btn => {
-      btn.addEventListener("click", function() {
-        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-        document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-
-        this.classList.add("active");
-        const tabId = this.dataset.tab;
-        if (tabId) document.getElementById(tabId).classList.add("active");
+      btn.addEventListener("click", function(e) {
+        if (e.target.tagName === "BUTTON") return;
+        selectTab(this.dataset.tab);
       });
     });
 
-    // افزودن تب جدید
-    document.getElementById("add-tab-btn").addEventListener("click", function() {
-      const tabName = prompt("نام تب جدید را وارد کنید:");
-      if (tabName) {
-        const tabId = tabName.replace(/\s+/g, '-').toLowerCase();
+    function selectTab(tabId) {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelector(`[data-tab='${tabId}']`).classList.add("active");
 
-        // دکمه تب جدید
-        const newTabBtn = document.createElement("button");
-        newTabBtn.className = "tab-btn";
-        newTabBtn.dataset.tab = tabId;
-        newTabBtn.textContent = tabName;
-        document.querySelector(".tabs").insertBefore(newTabBtn, this);
+      document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+      document.getElementById(tabId).classList.add("active");
+    }
 
-        // محتوای تب جدید
-        const newTabContent = document.createElement("div");
-        newTabContent.id = tabId;
-        newTabContent.className = "tab-content";
-        newTabContent.innerHTML = `<h3>${tabName}</h3><p>محتوای اولیه ${tabName}</p>`;
-        document.getElementById("tab-contents").appendChild(newTabContent);
+    let tabCount = 1;
 
-        // رویداد تب جدید
-        newTabBtn.addEventListener("click", function() {
-          document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-          document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+    function addTab() {
+      const name = prompt("نام تب را وارد کنید:");
+      if (!name) return;
+      tabCount++;
+      const id = 'tab' + tabCount;
 
-          this.classList.add("active");
-          document.getElementById(tabId).classList.add("active");
-        });
+      const newTabBtn = document.createElement("button");
+      newTabBtn.className = "tab-btn";
+      newTabBtn.dataset.tab = id;
+      newTabBtn.innerHTML = `
+        <span>${name}</span>
+        <button class="small-btn btn-warning" onclick="renameTab(event, '${id}')">✏️</button>
+        <button class="small-btn btn-danger" onclick="removeTab(event, '${id}')">❌</button>
+      `;
+      newTabBtn.addEventListener("click", function(e) {
+        if (e.target.tagName === "BUTTON") return;
+        selectTab(id);
+      });
+      document.getElementById("tabs").insertBefore(newTabBtn, document.getElementById("add-tab-btn"));
+
+      const newContent = document.createElement("div");
+      newContent.id = id;
+      newContent.className = "tab-content";
+      newContent.innerHTML = `
+        <h3>${name}</h3>
+        <button class="control-btn" onclick="addRow('${id}-table')">➕ ردیف</button>
+        <button class="control-btn" onclick="addColumn('${id}-table')">➕ ستون</button>
+        <table id="${id}-table">
+          <tr>
+            <th>ردیف</th>
+            <th>شرح</th>
+          </tr>
+          <tr>
+            <td>1</td>
+            <td>نمونه داده</td>
+          </tr>
+        </table>
+      `;
+      document.getElementById("tab-contents").appendChild(newContent);
+
+      selectTab(id);
+    }
+
+    function removeTab(e, id) {
+      e.stopPropagation();
+      if (confirm("حذف شود؟")) {
+        document.querySelector(`[data-tab='${id}']`).remove();
+        document.getElementById(id).remove();
       }
-    });
+    }
+
+    function renameTab(e, id) {
+      e.stopPropagation();
+      const newName = prompt("نام جدید تب:");
+      if (newName) {
+        document.querySelector(`[data-tab='${id}'] span`).textContent = newName;
+        document.querySelector(`#${id} h3`).textContent = newName;
+      }
+    }
+
+    function addRow(tableId) {
+      const table = document.getElementById(tableId);
+      const newRow = table.insertRow();
+      for (let i = 0; i < table.rows[0].cells.length; i++) {
+        const cell = newRow.insertCell();
+        cell.contentEditable = true;
+        cell.innerHTML = " ";
+      }
+    }
+
+    function addColumn(tableId) {
+      const table = document.getElementById(tableId);
+      const colCount = table.rows[0].cells.length;
+      for (let i = 0; i < table.rows.length; i++) {
+        const cell = table.rows[i].insertCell();
+        if (i === 0) cell.outerHTML = `<th>ستون ${colCount}</th>`;
+        else {
+          cell.contentEditable = true;
+          cell.innerHTML = " ";
+        }
+      }
+    }
   </script>
 
 </body>
