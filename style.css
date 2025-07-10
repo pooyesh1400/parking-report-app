@@ -37,3 +37,41 @@
 #addTab:hover {
   background: #f2b900;
 }
+#tableContainer table {
+  width: 95%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#tableContainer table td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: center;
+  font-size: 15px;
+  color: #333;
+  transition: background 0.3s ease;
+}
+
+#tableContainer table tr:hover {
+  background: #f1f1f1;
+}
+
+#tableContainer button {
+  margin: 15px 5px 0;
+  padding: 10px 16px;
+  border-radius: 25px;
+  border: none;
+  background: #002b5b;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#tableContainer button:hover {
+  background: #001f3f;
+}
