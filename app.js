@@ -1,128 +1,126 @@
-let tabs = {};
+let tabs = [];
 let activeTab = null;
 
-document.getElementById('addTab').onclick = () => {
-  const name = prompt('نام تب جدید:');
-  if (name) addTab(name);
-};
-
-function addTab(name) {
-  tabs[name] = { headers: [], rows: [] };
-  renderTabs();
-  switchTab(name);
-}
+document.getElementById("addTab").addEventListener("click", () => {
+  const name = prompt("نام تب را وارد کنید:");
+  if (name) {
+    const tab = { name: name, table: [] };
+    tabs.push(tab);
+    renderTabs();
+    setActiveTab(tab);
+  }
+});
 
 function renderTabs() {
-  const container = document.getElementById('tabContainer');
-  container.innerHTML = '';
-  for (let name in tabs) {
-    const btn = document.createElement('button');
-    btn.textContent = name;
-    btn.onclick = () => switchTab(name);
-    container.appendChild(btn);
-  }
+  const container = document.getElementById("tabContainer");
+  container.innerHTML = "";
+  tabs.forEach(tab => {
+    const div = document.createElement("div");
+    div.className = "tab";
+    div.textContent = tab.name;
+    div.addEventListener("click", () => setActiveTab(tab));
+    if (tab === activeTab) div.classList.add("active");
+    container.appendChild(div);
+  });
 }
 
-function switchTab(name) {
-  activeTab = name;
+function setActiveTab(tab) {
+  activeTab = tab;
+  renderTabs();
   renderTable();
 }
 
 function renderTable() {
-  const container = document.getElementById('tableContainer');
-  container.innerHTML = '';
-  const tab = tabs[activeTab];
+  const container = document.getElementById("tableContainer");
+  container.innerHTML = "";
 
-  if (!tab) return;
+  if (!activeTab) {
+    container.innerHTML = "<p>ابتدا یک تب انتخاب کنید.</p>";
+    return;
+  }
 
-  // Table
-  const table = document.createElement('table');
-  table.className = 'table';
+  const table = document.createElement("table");
+  table.style.width = "100%";
+  table.style.borderCollapse = "collapse";
 
-  // Header row
-  const headerRow = table.insertRow();
-  tab.headers.forEach((h, i) => {
-    const cell = headerRow.insertCell();
-    const input = document.createElement('input');
-    input.value = h;
-    input.onchange = () => { tab.headers[i] = input.value; save(); };
-    cell.appendChild(input);
-    const del = document.createElement('button');
-    del.textContent = '❌';
-    del.onclick = () => { tab.headers.splice(i, 1); tab.rows.forEach(r => r.splice(i, 1)); renderTable(); };
-    cell.appendChild(del);
-  });
-  const addCol = headerRow.insertCell();
-  addCol.innerHTML = `<button onclick="addColumn()">➕ ستون</button>`;
+  activeTab.table.forEach((row, rowIndex) => {
+    const tr = document.createElement("tr");
 
-  // Data rows
-  tab.rows.forEach((r, ri) => {
-    const row = table.insertRow();
-    r.forEach((val, ci) => {
-      const cell = row.insertCell();
-      const input = document.createElement('input');
-      input.value = val;
-      input.onchange = () => { tab.rows[ri][ci] = input.value; save(); };
-      cell.appendChild(input);
+    row.forEach((cell, colIndex) => {
+      const td = document.createElement("td");
+      td.style.border = "1px solid #334155";
+      td.style.padding = "10px";
+      td.contentEditable = true;
+      td.innerText = cell;
+
+      td.addEventListener("input", () => {
+        activeTab.table[rowIndex][colIndex] = td.innerText;
+      });
+
+      tr.appendChild(td);
     });
-    const delRow = row.insertCell();
-    delRow.innerHTML = `<button onclick="deleteRow(${ri})">❌</button>`;
-  });
 
-  // Add row button
-  const addRow = table.insertRow();
-  const cell = addRow.insertCell();
-  cell.colSpan = tab.headers.length + 1;
-  cell.innerHTML = `<button onclick="addRow()">➕ ردیف</button>`;
+    // دکمه حذف سطر
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "❌";
+    deleteBtn.style.marginRight = "8px";
+    deleteBtn.onclick = () => {
+      activeTab.table.splice(rowIndex, 1);
+      renderTable();
+    };
+    const tdBtn = document.createElement("td");
+    tdBtn.appendChild(deleteBtn);
+    tr.appendChild(tdBtn);
+
+    table.appendChild(tr);
+  });
 
   container.appendChild(table);
-}
 
-function addColumn() {
-  const tab = tabs[activeTab];
-  tab.headers.push('ستون جدید');
-  tab.rows.forEach(r => r.push(''));
-  renderTable();
-}
+  // دکمه اضافه سطر
+  const addRowBtn = document.createElement("button");
+  addRowBtn.textContent = "➕ افزودن سطر";
+  addRowBtn.onclick = () => {
+    const cols = activeTab.table[0]?.length || 3;
+    activeTab.table.push(Array(cols).fill(""));
+    renderTable();
+  };
+  container.appendChild(addRowBtn);
 
-function addRow() {
-  const tab = tabs[activeTab];
-  const newRow = tab.headers.map(() => '');
-  tab.rows.push(newRow);
-  renderTable();
-}
-
-function deleteRow(index) {
-  tabs[activeTab].rows.splice(index, 1);
-  renderTable();
-}
-
-function save() {
-  localStorage.setItem('parkingAppData', JSON.stringify(tabs));
+  // دکمه اضافه ستون
+  const addColBtn = document.createElement("button");
+  addColBtn.textContent = "➕ افزودن ستون";
+  addColBtn.style.marginRight = "12px";
+  addColBtn.onclick = () => {
+    activeTab.table.forEach(row => row.push(""));
+    if (activeTab.table.length === 0) {
+      activeTab.table.push([""]);
+    }
+    renderTable();
+  };
+  container.appendChild(addColBtn);
 }
 
 function exportData() {
-  const blob = new Blob([JSON.stringify(tabs, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'report-data.json';
+  const data = JSON.stringify(tabs);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([data], { type: "application/json" }));
+  a.download = "data.json";
   a.click();
 }
 
 function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
   const reader = new FileReader();
   reader.onload = e => {
     tabs = JSON.parse(e.target.result);
+    if (tabs.length) {
+      activeTab = tabs[0];
+    }
     renderTabs();
+    renderTable();
   };
-  reader.readAsText(event.target.files[0]);
+  reader.readAsText(file);
 }
-
-// Load on start
-window.onload = () => {
-  const saved = localStorage.getItem('parkingAppData');
-  if (saved) {
-    tabs = JSON.parse(saved);
-    renderTabs();
-  }
-};
