@@ -1,39 +1,39 @@
-body {
-  font-family: sans-serif;
-  background: #f0f4f8;
-  padding: 20px;
-}
-
 .tabs {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 8px;
+  padding: 15px 30px;
+  background: #f5f7fa;
+  flex-wrap: wrap;
 }
 
-button {
-  background: #2196F3;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+.tabs .tab {
+  padding: 10px 18px;
+  border-radius: 25px;
+  background: #e0e0e0;
+  color: #333;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  user-select: none;
 }
 
-button:hover {
-  background: #1976D2;
+.tabs .tab.active {
+  background: #002b5b;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 43, 91, 0.3);
 }
 
-.table {
-  border-collapse: collapse;
-  width: 100%;
+#addTab {
+  padding: 10px 18px;
+  border-radius: 25px;
+  background: #f9c80e;
+  color: #002b5b;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.table th, .table td {
-  border: 1px solid #ccc;
-  padding: 6px;
-  text-align: center;
-}
-
-.actions {
-  margin-top: 20px;
+#addTab:hover {
+  background: #f2b900;
 }
