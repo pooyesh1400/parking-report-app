@@ -56,3 +56,12 @@ th, td {
 th {
   background: #e6f2ff;
 }
+#add-tab-btn {
+  background-color: #ffa500;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 10px;
+}
