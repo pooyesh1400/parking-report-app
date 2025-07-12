@@ -1,5 +1,7 @@
 // app.js
 
+// app.js
+
 // دیتای تستی — همین ساختار رو بعد با داده‌های واقعی پر می‌کنیم
 const data = {
   "قیمت جدید": [
@@ -36,3 +38,4 @@ function renderTabs() {
 }
 
 renderTabs();
+
