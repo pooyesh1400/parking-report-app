@@ -1,32 +1,0 @@
-
-<!DOCTYPE html>
-<html lang="fa">
-<head>
-  <meta charset="UTF-8" />
-  <title>سامانه مدیریت پارکینگ پالایشگاه اصفهان</title>
-  <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <header>
-    <div class="logo">لوگو پالایشگاه اصفهان</div>
-    <h1>سامانه مدیریت پارکینگ پالایشگاه اصفهان</h1>
-  </header>
-
-  <div class="tabs">
-    <button id="addTab">➕ افزودن تب</button>
-    <div id="tabContainer"></div>
-  </div>
-
-  <div id="tableContainer"></div>
-
-  <div class="actions">
-    <button onclick="exportData()">📤 ذخیره JSON</button>
-    <label for="fileInput">📥 بارگذاری JSON</label>
-    <input type="file" id="fileInput" onchange="importData(event)">
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="app.js"></script>
-</body>
-</html>
